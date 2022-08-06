@@ -9,7 +9,7 @@
 <body>
     <ul>
     {% for entregable in entregables %}
-        <li> {{entregable.nombre}}, {{entregable.fechaDeEntrega}}, {{entregable.entregado}} </li>
+        <li> {{entregable.nombre}}, podes entregar el desafío hasta el {{entregable.fechaDeEntrega}}. Entregó el desafío? True or False? {{entregable.entregado}} </li>
     {% endfor %}
     </ul>
 </body>
