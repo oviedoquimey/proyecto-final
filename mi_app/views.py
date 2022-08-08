@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import date, datetime
 from mi_app.models import Curso, Entregable, Estudiante, Profesor
+from mi_app.forms import CursoBusquedaFormulario, CursoFormulario
 
 def saludo(request):
 
@@ -38,3 +39,26 @@ def fechas_entregable(request):
     context = {}
     context["entregables"] = Entregable.objects.all()
     return render(request, "mi_app/fecha_entregable.html", context)
+
+
+def formulario_curso(request):
+
+    if request.method == "POST":
+        mi_formulario = CursoFormulario(request.POST)
+        print(mi_formulario)
+        if mi_formulario.is_valid:
+                informacion = mi_formulario.cleaned_data
+                curso = Curso (nombre=informacion['curso'], camada=informacion['camada'])
+                curso.save()
+                return render(request, "AppCoder/inicio.html")
+    else:
+        mi_formulario = CursoFormulario()
+    return render(request, "mi_app/curso_formulario.html",{"mi_formulario":mi_formulario})
+
+def formulario_busqueda(request):
+    busqueda_formulario = CursoBusquedaFormulario()
+    if request.GET:
+        cursos = Curso.objects.filter(nombre=busqueda_formulario["criterio"]).all()
+        return render(request,"mi_app/curso_busqueda.html", {"cursos": cursos})
+    
+    return render(request, "mi_app/curso_busqueda.html", {"busqueda_formulario": busqueda_formulario})
