@@ -1,5 +1,5 @@
 from urllib import request
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from datetime import date, datetime
 from mi_app.models import Curso, Entregable, Estudiante, Profesor
@@ -7,9 +7,16 @@ from mi_app.forms import CursoBusquedaFormulario, CursoFormulario
 from django.contrib.auth.forms import AuthenticationForm
 #from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
 @login_required
+def index(request):
+    return render(request, 'plantilla/base.html')
+
+def salir(request):
+    logout(request)
+    return redirect('/')
 
 def saludo(request):
 
@@ -69,42 +76,6 @@ def formulario_busqueda(request):
     
     return render(request, "mi_app/curso_busqueda.html", {"busqueda_formulario": busqueda_formulario})
 
-#def login_request(request):
-    
-    if request.method == "POST":
-        form = AuthenticationForm(request, data = request.POST)
-        if form.is_valid():
-            usuario = form.cleaned_data.get('username')
-            contraseña = form.cleaned_data.get('password')
-            user = authenticate(username=usuario, password=contraseña)
-
-            if user is not None:
-                login(request. user)
-                return render(request, "mi_app/inicio.html", {"mensaje":f"Bienvenido {usuario}"})
-            else:
-                return render(request, "mi_app/inicio.html", {"mensaje": "Error, datos incorrectos"})
-
-        else:
-                return render(request,"mi_app/incio.html", {"mensaje":"Error, formulario erroneo"})
-    form = AuthenticationForm()
-    return render(request,"mi_app/login.html", {'form':form})
-
-
-#def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-
-            username = form.cleaned_data['username']
-            form.save()
-            return render(request,"mi_app/inicio.html" , {"mensaje":"Usuario Creado :)"})
-
-    else:
-        form = UserCreationForm()
-        form = UserRegisterForm()
-
-    return render(request,"mi_app/registro.html", {"form":form})
 
 
 
