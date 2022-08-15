@@ -8,3 +8,4 @@ class CursoFormulario(forms.Form):
 class CursoBusquedaFormulario(forms.Form):
     criterio = forms.CharField()
 
+
